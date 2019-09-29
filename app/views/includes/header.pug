@@ -1,0 +1,36 @@
+nav.navbar.navbar-expand-md.navbar-dark.fixed-top.bg-dark
+  a.navbar-brand(href='/') 六东云
+  button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarCollapse' aria-controls='navbarCollapse' aria-expanded='false' aria-label='Toggle navigation')
+    span.navbar-toggler-icon
+  #navbarCollapse.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li(class=(title === '首页') ? 'active nav-item' : 'nav-item')
+        a.nav-link(href="/", title="首页") 首页
+
+      - if (req.isAuthenticated())
+        li(class=isActive('/pendings') ? 'active nav-item' : 'nav-item')
+          a.nav-link(href="/pendings", title="待入网终端") 待入网终端
+
+        li(class=isActive('/inners') ? 'active nav-item' : 'nav-item')
+          a.nav-link(href="/inners", title="内网终端") 内网终端
+
+        li(class=isActive('/outers') ? 'active nav-item' : 'nav-item')
+          a.nav-link(href="/outers", title="外网终端") 外网终端
+
+        li(class=isActive('/urls') ? 'active nav-item' : 'nav-item')
+          a.nav-link(href="/urls", title="网址管理") 网址管理
+
+        li(class=isActive('/logs') ? 'active nav-item' : 'nav-item')
+          a.nav-link(href="/logs", title="跨网审计") 跨网审计
+
+        li(class=isActive('/cuts') ? 'active nav-item' : 'nav-item')
+          a.nav-link(href="/cuts", title="分词设置") 分词设置
+      
+
+    ul.nav.navbar-nav.navbar-right
+      - if (req.isAuthenticated())
+        li.nav-item
+          a.nav-link(href="/logout", title="退出") 退出
+      - else
+        li(class=isActive('/login') ? 'active nav-item' : 'nav-item')
+          a.nav-link(href="/login", title="登录") 登录

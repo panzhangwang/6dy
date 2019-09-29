@@ -1,0 +1,55 @@
+extends ../layouts/default
+
+block main
+  h2= room.name
+  
+block content
+  .row
+    .col-7
+      ul.nav.nav-tabs.mb-4
+        li.nav-item
+          a(class=(tag === '') ? 'active nav-link' : 'nav-link', href="/rooms/"+room._id) 全部
+        li.nav-item
+          a(class=(tag === '查询') ? 'active nav-link' : 'nav-link', href="/rooms/"+room._id+"/search") 查询
+      
+      .row
+        .col-8
+          form(method="post", role="form")
+            input(type="hidden", name="_csrf", value=csrf_token)
+
+            .form-group
+              label(for='keyword') 文件名关键字
+              input.form-control#keyword(type='text', name="keyword")
+
+            .form-group
+              label 标签
+              select#tag.form-control.my-1.mr-sm-2(name="tags", multiple="multiple")
+                option(value="") 请选择
+                each t in tags
+                  option(value=t)= t
+
+            .form-group
+              label(for='local') 仅查本机上传的
+              .checkbox
+                label
+                  input(type="checkbox", name="local")
+
+            .mt-5
+              button.btn.btn-primary(type='submit') 查询
+
+    .col-5.pl-lg-5
+      include sidebar.pug
+
+
+block foot
+  script.
+    $('.custom-file-input').on('change',function(){
+      var fileName = $(this).val();
+      var cleanFileName = fileName.replace('C:\\fakepath\\', " ");
+      $(this).next('.custom-file-label').html(cleanFileName);
+    })
+
+    $('#tag').select2({
+      theme: 'bootstrap4',
+      tags: true
+    });

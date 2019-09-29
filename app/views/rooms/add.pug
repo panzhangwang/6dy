@@ -1,0 +1,24 @@
+extends ../layouts/default
+
+block main
+  h2= room.name
+
+block content
+  .row
+    .col-9
+      .table-responsive
+        table.table.table-striped.table-hover.dtable
+          thead
+            tr
+              th IP
+              th 科室
+              th 分机
+              th 添加
+          tbody
+            each p, idx in pcs
+              tr
+                td= p.ip
+                td= p.dept
+                td= p.phone
+                td
+                  a(href="/rooms/"+room._id+"/addpc/"+p._id) 添加

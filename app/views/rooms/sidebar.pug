@@ -1,0 +1,31 @@
+form(method="post", action="/rooms/"+room._id+"/docs", enctype="multipart/form-data", role="form")
+  input(type="hidden", name="_csrf", value=csrf_token)
+  .row
+    .col
+      .custom-file.mb-2
+        input#file.custom-file-input(type='file', name="image")
+        label.custom-file-label(for="file") 选择文件
+    .col-auto
+      button.btn.btn-success.mb-2(type='submit') 上传
+.clearfix.mt-5
+  if (isManager)
+    a.float-right(href="/rooms/"+room._id+"/pcs/add") 添加共享主机
+.table-responsive
+  table.table.table-striped.table-hover.table-sm
+    thead
+      tr
+        th 位置
+        th 分机
+        th IP
+        if (isManager)
+          th 
+    tbody
+      each p, idx in pcs
+        tr
+          td= p.loc
+          td= p.phone
+          td= p.ip
+          if (isManager)
+            td.text-right
+              a.text-muted(href="/rooms/"+room._id+"/delpc/"+p._id)
+                i.fa.fa-trash

@@ -1,0 +1,31 @@
+extends ../layouts/default
+
+block main
+  h2= title
+
+block content
+  if (logs.length)
+    .table-responsive
+      table.table.table-striped.table-hover
+        thead
+          tr
+            th 文档
+            th 源终端
+            th 访问终端
+            th 下载时间
+            th 下载者
+        tbody
+          each log in logs
+            tr
+              td
+                a(href="/logs/"+log._id+"/download")= log.title
+              td
+                span= log.srcpc.loc                
+                span.ml-2= log.srcpc.ip
+              td
+                span= log.vispc.loc                
+                span.ml-2= log.vispc.ip
+              td= formatDate(log.at)
+              td= log.emp
+
+  include ../includes/pagi.pug

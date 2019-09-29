@@ -1,0 +1,21 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  .row
+    .col-md-5
+      form(method="post", role="form")
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+        .form-group
+          label(for='phone') 分机
+          input.form-control#phone(type='text', name="phone")
+
+        .form-group
+          label(for='memo') 申请理由
+          textarea.form-control#memo(rows="5", name="memo", required, placeholder="请明确科室、物理位置等信息")
+
+        
+        button.btn.btn-primary(type='submit') 提交

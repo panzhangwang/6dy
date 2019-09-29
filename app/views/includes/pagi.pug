@@ -1,0 +1,13 @@
+- if (pages > 1)
+  ul.pagination
+    - var arr = paginate({ currentPage: page, totalPages: pages })
+    each item in arr
+      li.page-item(class=item.isActive && item.type === 'PAGE' && 'active')
+        a.page-link(href=`?page=${item.value}`)
+          case item.type
+            when 'FIRST_PAGE_LINK': | 首页
+            when 'PREVIOUS_PAGE_LINK': | 上页
+            when 'PAGE': =item.value
+            when 'ELLIPSIS': | ...
+            when 'NEXT_PAGE_LINK': | 下页
+            when 'LAST_PAGE_LINK': | 尾页

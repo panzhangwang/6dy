@@ -1,0 +1,13 @@
+extends ../layouts/default
+
+block content
+  .row
+    .col-md-8      
+      form(method="post", action="/cuts", role="form")
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+        .form-group
+          label(for='cuts') 分词
+          input.form-control#cuts(type='text', name="cuts", value=cuts)
+        
+        button.btn.btn-primary(type='submit') 保存

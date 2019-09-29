@@ -1,0 +1,61 @@
+extends ../layouts/default
+
+block content  
+  if (flow === '无许可')
+    h3.mb-5 访问未授权
+    a.btn.btn-primary(href="/apply") 申请开通
+
+  if (flow === '待审核')
+    h3.mt-5 申请已经提交，请稍后！或联系IT管理员
+  
+  if (flow === '已授权')
+    .row
+      .col-4
+        if (tops.length)
+          .mt-3.mb-5.shadow.rounded
+            ul.list-group
+              each t in tops
+                a.list-group-item.list-group-item-action(href="/documents/"+t._id+"/predownload")= t.title
+        a.btn.btn-outline-secondary.btn-block.btn-lg.mt-3(href="/rooms/new", title="新建云文件夹") 
+          i.fa.fa-folder
+          | &nbsp;&nbsp;新建云文件夹
+        if (rooms.length)
+          .mt-3.shadow.rounded
+            ul.list-group
+              each r in rooms
+                a.list-group-item.list-group-item-action(href="/rooms/"+r._id)
+                  .row
+                    .col
+                      .d-block= r.name
+                      small.text-muted
+                        i.fa.fa-cubes
+                        span.ml-1.mr-4= r.pcs.length
+                        
+                        i.fa.fa-files-o
+                        span.ml-1= r.docCount
+                    .col-auto
+                      if (r.mgr._id == pc.id)
+                        .mt-2.text-primary
+                          i.fa.fa-user-o.fa-lg
+        else
+          .mt-3
+            p.text-muted 暂无共享文件夹
+          
+        .mt-3
+          a.text-muted(href="/pcs/"+pc._id+"/change", title="修改主机信息")
+            i.fa.fa-location-arrow
+            span.text-muted.ml-3= pc.loc
+            span.ml-3.text-muted= pc.ip
+
+      .col-8.pl-lg-5
+        if (urls.length)
+          .card-columns
+            each u in urls              
+              .card.my-3
+                a.applnk(href=u.addr, target="_blank")
+                  .card-body.text-center.pb-2                      
+                    if (u.memo)
+                      .card-title.title-memo= u.name
+                      .app-memo.text-muted= u.memo
+                    else
+                      .card-title.title-only= u.name

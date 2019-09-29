@@ -1,0 +1,26 @@
+extends ../layouts/default
+
+block content
+  .row
+    .col-12      
+      a.btn.btn-success.mb-3(href="/urls/new") 新建网址
+      if (urls.length)
+        .table-responsive
+          table.table.table-striped.table-hover
+            thead
+              tr
+                th 名称                
+                th 内网地址
+                th 外网地址
+                th 使用说明
+            tbody
+              each p, idx in urls
+                tr
+                  td
+                    a(href="/urls/"+p._id+"/edit")= p.name
+                  td= p.inn
+                  td= p.out
+                  td= p.memo
+
+      else
+        p.text-muted.mt-5 无数据

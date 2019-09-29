@@ -1,0 +1,61 @@
+extends ../layouts/default
+
+block main
+  h2
+    = room.name
+    if (isManager)
+      .d-inline.h5.ml-3
+        a.text-muted(href="/rooms/"+room._id+"/edit", title="编辑")
+          i.fa.fa-pencil
+  
+block content
+  .row
+    .col-7
+      ul.nav.nav-tabs.mb-4
+        li.nav-item
+          a(class=(tag === '') ? 'active nav-link' : 'nav-link', href="/rooms/"+room._id) 全部
+        li.nav-item
+          a(class=(tag === '查询') ? 'active nav-link' : 'nav-link', href="/rooms/"+room._id+"/search") 查询
+        li.nav-item
+          a(class=(tag !== '') ? 'active nav-link' : 'nav-link', href="/rooms/"+room._id+"/tags/"+tag)= tag
+
+      if (docs.length)
+        each d in docs
+          .border-bottom
+            .clearfix.mt-3
+              .float-left
+                a.h5(href="/documents/"+d._id+"/predownload")= d.title
+                if (isManager || pc.id == d.pc.id)
+                  a.h6.text-muted.ml-3(href="/documents/"+d._id+"/edit", title="编辑")
+                    i.fa.fa-pencil
+                
+              .float-right.badges.d-flex.flex-row             
+                if (d.top)
+                  .px-1.bg-warning.text-dark 首
+                if (isOut(d.pc.ip))
+                  .px-1.bg-primary.text-white 外
+                else
+                  .px-1.bg-danger.text-white 内
+                if (ip === d.pc.ip)
+                  .px-1.bg-secondary.text-white 本
+                
+            .tags-section.text-muted.mt-2
+              = formatDate(d.at)              
+              span.ml-3= d.pc.dept
+              span.ml-3= d.pc.loc
+              
+              .mb-2
+                each t in d.tags
+                  a.text-dark.mr-3(href="/rooms/"+room._id+"/tags/"+t)= t
+      include ../includes/pagi.pug
+    .col-5.pl-lg-5
+      include sidebar.pug
+
+
+block foot
+  script.
+    $('.custom-file-input').on('change',function(){
+      var fileName = $(this).val();
+      var cleanFileName = fileName.replace('C:\\fakepath\\', " ");
+      $(this).next('.custom-file-label').html(cleanFileName);
+    })

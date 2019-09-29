@@ -1,0 +1,48 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  - var action = '/urls'
+  - action += url.isNew? '' : '/' + url.id
+
+  .row
+    .col-md-4
+      form(method="post", action=action, role="form")
+
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+        - if (!url.isNew)
+          input(type="hidden", name="_method", value="PUT")
+
+        .form-group
+          label(for='name') 名称
+          input.form-control#name(type='text', name="name", value=url.name, required)
+
+        .form-group
+          label 内网地址
+          input.form-control(type='text', name="inn", value=url.inn)
+
+        .form-group
+          label 外网地址
+          input.form-control(type='text', name="out", value=url.out)
+
+        .form-group
+          label 使用说明
+          input.form-control(type='text', name="memo", value=url.memo)
+
+        .form-group
+          label(for='ips') 特定IP
+          input.form-control#ips(type='text', name="ips", value=url.ips.join(','))
+
+        
+        button.btn.btn-primary(type='submit') 保存
+
+      - if (!url.isNew)
+        hr
+
+        form.mt-5(action="/urls/"+url.id, method="post", onsubmit="return confirm('确认删除吗？')")
+          input(type='hidden', name='_csrf', value=csrf_token)
+          input(type="hidden", name="_method", value="DELETE")
+          button.btn.btn-danger(type="submit") 删除该网址

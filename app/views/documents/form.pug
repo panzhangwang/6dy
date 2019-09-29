@@ -1,0 +1,41 @@
+extends ../layouts/default
+
+block main
+  h2= title
+  hr
+
+block content
+  .row
+    .col-6
+      form(method="post", action="/documents/"+document._id, role="form")
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+        .form-group
+          label(for='title') 名称
+          input.form-control#title(type='text', name="title", value=document.title)
+
+        .form-group
+          label(for='top') 置于首页
+          .checkbox
+            label
+              input(type="checkbox", name="top", checked=(document.top===1 ? "checked" : undefined))
+        
+        .form-group
+          label(for='tags') 标签
+          input.form-control#tags(type='text', name="tags", value=tags)
+
+        button.btn.btn-primary(type='submit') 保存
+        | &nbsp;
+        a.btn.btn-default(href='/rooms/'+room._id, title="取消") 取消
+        | &nbsp;
+        a.btn.btn-default(href="/documents/"+document.id+"/pass") 设置密码
+      
+  - if (isManager || pc.id == document.pc.id)
+    .mt-5
+      hr
+    .row.mt-3
+      .col-3
+        form.mt-5(action="/documents/"+document.id, method="post", onsubmit="return confirm('确定删除吗？')")
+          input(type="hidden", name="_csrf", value=csrf_token)
+          input(type="hidden", name="_method", value="DELETE")
+          button.btn.btn-danger(type="submit") 删除该文档

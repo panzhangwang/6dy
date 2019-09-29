@@ -1,0 +1,26 @@
+extends ../layouts/default
+
+block main
+  h2= title
+block content
+  if (pcs.length)
+    .table-responsive
+      table.table.table-striped.table-hover.dtable
+        thead
+          tr
+            th IP
+            th 位置
+            th 科室
+            th 分机
+            th 备注
+            th 状态
+        tbody
+          each p in pcs
+            tr
+              td
+                a(href="/pcs/"+p._id+"/edit")= p.ip
+              td= p.loc
+              td= p.dept
+              td= p.phone
+              td= p.memo
+              td= p.flow

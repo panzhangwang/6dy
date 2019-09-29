@@ -1,0 +1,12 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  .row
+    .col-md-5
+      form(method="post", action="/confirm" role="form")
+        input(type="hidden", name="_csrf", value=csrf_token)
+        
+        button.btn.btn-primary(type='submit') 确认

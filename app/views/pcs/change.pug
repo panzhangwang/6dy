@@ -1,0 +1,29 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  .row
+    .col-md-4
+      form(method="post", role="form")
+
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+
+        .form-group
+          label(for='ip') IP
+          input.form-control#ip(type='text', name="ip", value=pc.ip, required, readonly)
+
+        .form-group
+          label(for='phone') 电话
+          input.form-control#phone(type='text', name="phone", value=pc.phone)
+
+        .form-group
+          label(for='loc') 科室姓名
+          input.form-control#loc(type='text', name="loc", value=pc.loc)
+        
+        
+        button.btn.btn-primary(type='submit') 保存
+        | &nbsp;
+        a.btn.btn-link(href='/', title="cancel") 取消

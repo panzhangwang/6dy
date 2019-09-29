@@ -1,0 +1,39 @@
+extends ../layouts/default
+
+block content
+  p
+    a(href="/doc") 文档
+  .row
+    .col-12
+      if (urls.length)
+        .card-columns
+          each u in urls
+            if (out && u.out)              
+              .card
+                .card-body.text-center.pb-2
+                  a.h3.lnk(href="#", id=u.out, target="_blank")= u.name
+                  if (u.memo)
+                    br
+                    small.text-muted= u.memo
+                  else
+                    br
+                    small &nbsp;
+
+            if (!out && u.inn)
+              .card
+                .card-body.text-center.pb-2
+                  a.h3.lnk(href="#", id=u.inn, target="_blank")= u.name
+                  if (u.memo)
+                    br
+                    small.text-muted= u.memo
+                  else
+                    br
+                    small &nbsp;
+
+block foot
+  script.
+    $('.lnk').click(function(e) {
+      e.preventDefault();
+      window.open(this.id);
+      return false;
+    });

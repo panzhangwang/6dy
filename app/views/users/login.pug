@@ -1,0 +1,15 @@
+extends auth
+
+block auth
+  form.form-signin(action="/users/session", method="post", role="form")
+    input(type="hidden", name="_csrf", value=csrf_token)
+
+    p.col-sm-offset-2.error= message
+
+    .form-label-group
+      input#email.form-control(type='email' name='email' placeholder='Email address' required='' autofocus='')
+      label(for='email') 邮箱
+    .form-label-group
+      input#password.form-control(type='password' name='password' placeholder='Password' required='')
+      label(for='password') 密码
+    button.btn.btn-lg.btn-primary.btn-block(type='submit') 登录

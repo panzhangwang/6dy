@@ -1,0 +1,56 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  .row
+    .col-md-6
+      form(method="post", action='/pcs/'+pc._id, role="form")
+
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+
+        .form-group
+          label(for='ip') IP
+          input.form-control#ip(type='text', name="ip", value=pc.ip, required, readonly)
+
+        .form-group
+          label(for='name') 计算机名
+          input.form-control#name(type='text', name="name", value=pc.name)
+
+        .form-group
+          label(for='phone') 分机
+          input.form-control#phone(type='text', name="phone", value=pc.phone)
+        
+        .form-group
+          label(for='phone') 归属科室
+          select#depts.form-control(name="dept", required)
+            option(value="") 请选择
+
+        .form-group
+          label(for='memo') 备注
+          textarea.form-control#memo(rows="3", name="memo")= pc.memo
+
+        .form-group
+          label(for='flow') 状态
+          select.form-control(name="flow", required)
+            option(value="") 请选择
+            option(value="无许可", selected=(pc.flow === '无许可' ? "checked" : undefined)) 无许可
+            option(value="待审核", selected=(pc.flow === '待审核' ? "checked" : undefined)) 待审核
+            option(value="已授权", selected=(pc.flow === '已授权' ? "checked" : undefined)) 已授权
+        
+        button.btn.btn-primary(type='submit') 保存
+
+block foot
+  script.
+    var depts = !{JSON.stringify(depts)};
+    var dept = !{JSON.stringify(pc.dept)};
+    $('#depts').select2({
+      theme: 'bootstrap4',
+      tags: true,
+      allowClear: true,
+      placeholder: '选择科室',
+      data: depts
+    });
+    $("#depts").val(dept).trigger('change');

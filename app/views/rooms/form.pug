@@ -1,0 +1,33 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  - var action = '/rooms'
+  - action += room.isNew? '' : '/' + room.id
+
+  .row
+    .col-md-4
+      form(method="post", action=action, role="form")
+
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+        - if (!room.isNew)
+          input(type="hidden", name="_method", value="PUT")
+
+        .form-group
+          label(for='name') 名称
+          input.form-control#name(type='text', name="name", value=room.name, required, maxlength="30")
+        
+        button.btn.btn-primary(type='submit') 保存
+
+
+      - if (!room.isNew)
+        .mt-5
+          hr
+
+        form.mt-5(action="/rooms/"+room._id, method="post", onsubmit="return confirm('确认删除吗？')")
+          input(type='hidden', name='_csrf', value=csrf_token)
+          input(type="hidden", name="_method", value="DELETE")
+          button.btn.btn-danger(type="submit") 删除文件夹

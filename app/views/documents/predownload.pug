@@ -1,0 +1,29 @@
+extends ../layouts/default
+
+block main
+  h2= title
+  hr
+
+block content
+  .row
+    .col-4
+      form(method="post", action="/documents/"+document._id+"/predownload", role="form")
+        input(type="hidden", name="_csrf", value=csrf_token)
+
+        .form-group
+          label(for='title') 文档名称
+          input.form-control-plaintext#title(type='text', name="title", value=document.title, readonly)
+        
+        each o in limits
+          if (o === 'crossed')
+            .form-group
+              label(for='emp') 签名
+              input.form-control#emp(type='text', name="emp", required)
+          if (o === 'protected')
+            .form-group
+              label(for='pass') 密码
+              input.form-control#pass(type='password', name="password", required)
+
+
+        button.btn.btn-primary(type='submit') 下载
+      

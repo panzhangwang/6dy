@@ -1,0 +1,13 @@
+extends ../layouts/default
+
+block content
+  .clear-fix
+    span.h5.float-left 我的文档
+    .float-right
+      if (isInn)
+        a.btn.btn-outline-danger(href="/inns") 发往内网
+        a.btn.btn-outline-success.ml-5(href="/outs") 发往外网
+
+      if (isOut)
+        a.btn.btn-outline-success.ml-5(href="/outs") 发往外网
+  

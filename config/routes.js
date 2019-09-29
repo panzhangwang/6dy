@@ -114,6 +114,12 @@ module.exports = function(app, passport) {
   app.post('/documents/:documentId/pass',  documents.passPost);
   app.post('/documents/:documentId',  documents.update);
 
+  app.post('/send',  pcs.send);
+  app.get('/inbox',  pcs.inbox);
+  app.get('/outbox', pcs.outbox);
+  app.get('/notices/:noticeId/edit', pcs.editNotice);
+  app.post('/notices/:noticeId', pcs.updateNotice);
+
 
   /**
    * Error handling

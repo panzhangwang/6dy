@@ -24,9 +24,15 @@ block content
           input.form-control#phone(type='text', name="phone", value=pc.phone)
         
         .form-group
-          label(for='phone') 归属科室
+          label(for='depts') 归属科室
           select#depts.form-control(name="dept", required)
             option(value="") 请选择
+
+        .form-group
+          label(for='teams') 业务分组
+          select#teams.form-control(name="teams", multiple="multiple")
+            option(value="") 请选择
+          small.form-text.text-muted 创建时，在新标签后输入中文或英文逗号，再按回车
 
         .form-group
           label(for='memo') 备注
@@ -54,3 +60,26 @@ block foot
       data: depts
     });
     $("#depts").val(dept).trigger('change');
+
+    var teams = !{JSON.stringify(teams)};
+    var belongto = !{JSON.stringify(pc.teams)};
+    $('#teams').select2({
+      theme: 'bootstrap4',
+      tags: true,
+      placeholder: '选择分组',
+      data: teams,
+      tokenSeparators: [ ',' ],
+      createTag: function(params) {
+        if (params.term.indexOf('，') > 0 || params.term.indexOf(',') > 0) {
+          var str = params.term;
+          str = str.substr(0, str.length - 1);
+          return {
+            id: str,
+            text: str
+          }
+        } else {
+          return null;
+        }
+      }
+    });
+    $("#teams").val(belongto).trigger('change');

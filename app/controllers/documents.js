@@ -11,6 +11,7 @@ const { getIP, isInn, isOut } = require('../utils');
 const Document = mongoose.model('Document');
 const Dict = mongoose.model('Dict');
 const Room = mongoose.model('Room');
+const Notice = mongoose.model('Notice');
 const Url = mongoose.model('Url');
 const Log = mongoose.model('Log');
 const Pc = mongoose.model('Pc');
@@ -109,11 +110,14 @@ exports.index = async(function*(req, res) {
       }
     }
   }
+
+  const teams = yield Pc.find({}).distinct('teams');
+  const hasNotice = yield Notice.countDocuments({ who: {$in: pc.teams}, flag: 'new' });
   
   res.render('documents/index', {
     title: '首页',
     rooms: arr,
-    flow, urls, out, ip, pc, tops
+    flow, urls, out, ip, pc, tops, teams, hasNotice
   });
 });
 

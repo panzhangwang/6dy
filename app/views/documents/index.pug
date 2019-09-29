@@ -10,12 +10,7 @@ block content
   
   if (flow === '已授权')
     .row
-      .col-4
-        if (tops.length)
-          .mt-3.mb-5.shadow.rounded
-            ul.list-group
-              each t in tops
-                a.list-group-item.list-group-item-action(href="/documents/"+t._id+"/predownload")= t.title
+      .col-3
         a.btn.btn-outline-secondary.btn-block.btn-lg.mt-3(href="/rooms/new", title="新建云文件夹") 
           i.fa.fa-folder
           | &nbsp;&nbsp;新建云文件夹
@@ -46,8 +41,38 @@ block content
             i.fa.fa-location-arrow
             span.text-muted.ml-3= pc.loc
             span.ml-3.text-muted= pc.ip
+      
+      .col-3.px-lg-5     
+        .mt-3
+          if (flow === '已授权')
+            if (tops.length)
+              .shadow.rounded
+                ul.list-group
+                  each t in tops
+                    a.list-group-item.list-group-item-action(href="/documents/"+t._id+"/predownload")= t.title
 
-      .col-8.pl-lg-5
+            .row.mt-5.mb-3
+              .col-6
+                if (hasNotice)
+                  a.inbox.btn.btn-block.btn-outline-success.animated.infinite.heartBeat.slow(href="/inbox") 收件箱
+                else
+                  a.inbox.btn.btn-block.btn-outline-success(href="/inbox") 收件箱
+              .col-6
+                a.outbox.btn.btn-block.btn-outline-secondary(href="/outbox") 发件箱
+            form#frm(method="post", role="form")
+              input(type="hidden", name="_csrf", value=csrf_token)
+              .form-group
+                textarea#what.form-control(rows="5", name="what")
+              .row
+                .col
+                  select#teams.form-control(name="who", required)
+                    option(value="") 请选择
+                    each t in teams
+                      option(value=t)= t
+                .col-auto
+                  button#send.btn.btn-success(type='button') 发送消息
+
+      .col-6
         if (urls.length)
           .card-columns
             each u in urls              
@@ -59,3 +84,56 @@ block content
                       .app-memo.text-muted= u.memo
                     else
                       .card-title.title-only= u.name
+
+block foot
+  script.
+    var teams = !{JSON.stringify(pc.teams)};
+
+    $('#teams').select2({
+      theme: 'bootstrap4',
+      placeholder: '发送至'
+    });
+
+    var socket = io();
+    socket.on('connect', function(){
+    });
+    socket.on('broad', function(data) {
+      if (teams.indexOf(data) > -1) {
+        location.reload();
+      }
+    });
+    socket.on('event', function(data){
+
+    });
+    socket.on('disconnect', function(){
+
+    });
+
+    $('#send').click(function(e) {
+      if ( $('#what').val() && $('#teams').val() ) {
+
+        $.post("/send", $("#frm").serialize(), function(d) {
+          var msg = $('#teams').val();
+          $('#what').val('');
+          $("#teams").val('').trigger('change');
+
+          Swal.fire({
+            type: 'success',
+            title: '发送成功！',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          
+          setTimeout(function(){ 
+            socket.emit('notify', msg);
+          }, 1500);
+        });
+
+      } else {
+        Swal.fire({
+          type: 'error',
+          title: '消息和接受者不能为空！'
+        })
+      }
+      
+    });

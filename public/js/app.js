@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () {  
     $('#tags').tagsInput({
       'height':'100px',
       'width':'380px',
@@ -42,6 +42,27 @@ $(document).ready(function () {
   $('.dtable').DataTable({
     "paging": false,
     "language": langOpt
+  });
+
+  $(document).on("click", '.send', function () {
+    setupCSRF();
+    var rid = this.id;
+
+    Swal.fire({
+      title: '确定删除吗？',
+      text: "删除后无法恢复",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: '确定',
+      cancelButtonText: '取消'
+    }).then((result) => {
+      if (result.value) {
+        $.post('/rows/'+rid+'/del', function(data, status){
+          window.location = '/fs/' + data.name;
+        });
+      }
+    });
   });
 
 });

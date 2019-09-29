@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const only = require('only');
 const Pc = mongoose.model('Pc');
+const Notice = mongoose.model('Notice');
+const { getIP, isInn, isOut } = require('../utils');
 const assign = Object.assign;
 
 /**
@@ -58,11 +60,12 @@ exports.pendings = async(function*(req, res) {
 
 exports.edit = async(function*(req, res) {
   const depts = yield Pc.find().distinct('dept');
-
+  const teams = yield Pc.find().distinct('teams');
+  
   res.render('pcs/edit', {
     title: '编辑终端信息',
     pc: req.pc,
-    depts
+    depts, teams
   });
 });
 
@@ -82,7 +85,7 @@ exports.change = async(function*(req, res) {
 
 exports.update = async(function*(req, res) {
   const pc = req.pc;
-  assign(pc, only(req.body, 'name memo phone flow dept'));
+  assign(pc, only(req.body, 'name memo phone flow dept teams'));
   try {
     yield pc.save();
     res.redirect(`/pendings`);
@@ -108,4 +111,81 @@ exports.changePost = async(function*(req, res) {
       pc
     });
   }
+});
+
+exports.send = async(function*(req, res) {
+  const ip = getIP(req);
+  let pc = yield Pc.findOne({ ip: ip});
+  const notice = new Notice({ pc: pc });
+  notice.what = req.body.what;
+  notice.who = req.body.who;
+  yield notice.save();
+  res.json({});
+});
+
+exports.inbox = async(function*(req, res) {
+  const ip = getIP(req);
+  let pc = yield Pc.findOne({ ip: ip});
+  const page = (req.query.page > 0 ? req.query.page : 1) - 1;  
+  const limit = 15;
+  const criteria = { who: {$in: pc.teams} };
+  const options = {
+    limit: limit,
+    page: page,
+    criteria: criteria
+  };
+
+  const notices = yield Notice.list(options);
+  const count = yield Notice.countDocuments(criteria);
+  const news = yield Notice.countDocuments({ who: {$in: pc.teams}, flag: 'new' });
+
+  res.render('pcs/inbox', {
+    title: '收件箱',
+    page: page + 1,
+    pages: Math.ceil(count / limit),
+    news, notices
+  });
+});
+
+exports.outbox = async(function*(req, res) {
+  const ip = getIP(req);
+  let pc = yield Pc.findOne({ ip: ip});
+  const page = (req.query.page > 0 ? req.query.page : 1) - 1;  
+  const limit = 15;
+  const criteria = { pc: pc };
+  const options = {
+    limit: limit,
+    page: page,
+    criteria: criteria
+  };
+
+  const notices = yield Notice.list(options);
+  const count = yield Notice.countDocuments(criteria);
+
+  res.render('pcs/outbox', {
+    title: '发件箱',
+    page: page + 1,
+    pages: Math.ceil(count / limit),
+    notices
+  });
+});
+
+exports.editNotice = async(function*(req, res) {
+  const notice = yield Notice.findById(req.params.noticeId).populate('pc');
+  
+  res.render('pcs/editNotice', {
+    title: '处理消息',
+    notice
+  });
+});
+
+exports.updateNotice = async(function*(req, res) {
+  const ip = getIP(req);
+  let pc = yield Pc.findOne({ ip: ip});
+  const notice = yield Notice.findById(req.params.noticeId).populate('pc');
+  assign(notice, only(req.body, 'ack flag'));
+  notice.by = pc;
+  notice.mat = Date.now();
+  yield notice.save();
+  res.redirect('/inbox');
 });

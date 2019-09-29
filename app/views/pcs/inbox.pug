@@ -1,0 +1,58 @@
+extends ../layouts/default
+
+block main
+  h2
+    = title
+    if (news)
+      small.ml-3
+        | (
+        = news
+        | )
+
+
+block content
+  if (notices.length)
+    .table-responsive
+      table.table.table-striped.table-hover
+        thead
+          tr
+            th 消息内容
+            th 来自
+            th 时间
+            th 状态
+            th 处理内容
+            th 处理者
+            th 处理时间
+        tbody
+          each n in notices
+            tr
+              td= n.what
+              td
+                = n.pc.loc
+                | &nbsp;
+                = n.pc.phone
+              td= formatDate(n.at)
+              td(class=(n.flag==='new' ? "table-warning" : undefined))
+                if (n.flag == 'new') 
+                  | 新的
+                if (n.flag == 'done') 
+                  | 已处理
+                if (n.flag == 'todo') 
+                  | 待处理
+                if (n.flag == 'close') 
+                  | 关闭
+              td
+                span.mr-3= n.ack
+                a(href="/notices/"+n._id+"/edit")
+                  i.fa.fa-pencil
+              td
+                if (n.by)
+                  = n.by.loc
+                  | &nbsp;
+                  = n.by.phone
+              td
+                if (n.mat)
+                  = formatDate(n.mat)
+
+
+  include ../includes/pagi.pug

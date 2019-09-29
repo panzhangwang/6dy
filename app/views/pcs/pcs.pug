@@ -11,6 +11,7 @@ block content
             th IP
             th 位置
             th 科室
+            th 分组
             th 分机
             th 备注
             th 状态
@@ -21,6 +22,7 @@ block content
                 a(href="/pcs/"+p._id+"/edit")= p.ip
               td= p.loc
               td= p.dept
+              td= p.teams
               td= p.phone
               td= p.memo
               td= p.flow

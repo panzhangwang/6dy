@@ -22,6 +22,8 @@ const config = require('./config');
 const models = join(__dirname, 'app/models');
 const port = process.env.PORT || 3000;
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 /**
  * Expose
@@ -50,7 +52,7 @@ connect();
 
 function listen() {
   if (app.get('env') === 'test') return;
-  app.listen(port);
+  server.listen(port);
   console.log('Express app started on port ' + port);
 }
 function connect() {
@@ -60,3 +62,10 @@ function connect() {
     .once('open', listen);
   return mongoose.connect(config.db, opts);
 }
+
+io.on('connection', function (socket) {
+  socket.on('notify', function(data) {
+    socket.emit('broad', data);
+    socket.broadcast.emit('broad',data);
+  });
+});

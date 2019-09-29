@@ -18,6 +18,7 @@ const PcSchema = new Schema({
   loc:   { type: String, default: '', trim: true },
   phone: { type: String, default: '', trim: true },
   dept:  { type: String, default: '', trim: true },
+  teams: [],
   flow:  { type: String, default: '无许可', trim: true },
   at:    { type: Date, default: Date.now }
 });

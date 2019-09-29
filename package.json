@@ -1,0 +1,68 @@
+{
+  "name": "6dy",
+  "description": "",
+  "keywords": [],
+  "version": "1.1.2",
+  "private": false,
+  "author": "Panzhang Wang",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panzhangwang/6dy.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=10.11.0"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development nodemon server.js",
+    "debug": "cross-env NODE_ENV=development nodemon --debug server.js",
+    "test": "cross-env NODE_ENV=test babel-tape-runner test/test-*.js",
+    "pretest": "eslint .",
+    "prod": "pm2-runtime start ecosystem.config.js --env production"
+  },
+  "dependencies": {
+    "body-parser": "~1.19.0",
+    "co": "~4.6.0",
+    "compression": "~1.7.4",
+    "connect-flash": "~0.1.1",
+    "connect-mongo": "~2.0.3",
+    "content-disposition": "^0.5.3",
+    "cookie-parser": "~1.4.4",
+    "cors": "~2.8.5",
+    "cross-env": "~5.2.0",
+    "csurf": "~1.10.0",
+    "dotenv": "~8.0.0",
+    "express": "~4.17.1",
+    "express-session": "~1.16.1",
+    "helmet": "~3.18.0",
+    "lodash": "^4.17.15",
+    "method-override": "~3.0.0",
+    "moment": "^2.24.0",
+    "mongoose": "^5.7.1",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.2",
+    "nanoid": "^2.1.1",
+    "notifier": "~0.2.0",
+    "only": "0.0.2",
+    "passport": "~0.4.0",
+    "passport-local": "~1.0.0",
+    "pm2": "~3.5.1",
+    "pug": "^2.0.4",
+    "ultimate-pagination": "~1.0.0",
+    "validator": "^11.1.0",
+    "view-helpers": "~0.2.0",
+    "winston": "~3.2.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "~10.0.1",
+    "babel-tape-runner": "~3.0.0",
+    "eslint": "~5.16.0",
+    "eslint-config-prettier": "~4.3.0",
+    "eslint-plugin-prettier": "~3.1.0",
+    "nodemon": "1.19.2",
+    "npm-check-updates": "~3.1.9",
+    "prettier": "~1.17.1",
+    "supertest": "*",
+    "tape": "~4.10.1"
+  }
+}

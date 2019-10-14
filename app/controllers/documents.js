@@ -91,6 +91,7 @@ exports.index = async(function*(req, res) {
   const urls = [];
   for (var i = 0; i < appUrls.length; i++) {
     const u = appUrls[i];
+
     if (out && u.out)  {
       if (!u.ips || u.ips.length == 0) {
         urls.push({ _id: u._id, name: u.name, memo: u.memo, addr: u.out });

@@ -85,7 +85,7 @@ exports.change = async(function*(req, res) {
 
 exports.update = async(function*(req, res) {
   const pc = req.pc;
-  assign(pc, only(req.body, 'name memo phone flow dept teams'));
+  assign(pc, only(req.body, 'name memo phone flow dept teams loc'));
   try {
     yield pc.save();
     res.redirect(`/pendings`);

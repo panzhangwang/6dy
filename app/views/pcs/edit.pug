@@ -35,6 +35,10 @@ block content
           small.form-text.text-muted 创建时，在新标签后输入中文或英文逗号，再按回车
 
         .form-group
+          label(for='loc') 位置
+          textarea.form-control#loc(rows="3", name="loc")= pc.loc
+
+        .form-group
           label(for='memo') 备注
           textarea.form-control#memo(rows="3", name="memo")= pc.memo
 

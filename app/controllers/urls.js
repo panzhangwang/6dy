@@ -65,8 +65,14 @@ exports.new = function(req, res) {
 
 exports.create = async(function*(req, res) {
   const url = new Url(only(req.body, 'name inn out memo'));
-  const ips = req.body.ips.split(',');
-  url.ips = ips;
+  
+  if (req.body.ips) {
+    const ips = req.body.ips.split(',');
+    url.ips = ips;
+  } else {
+    url.ips = [];
+  }
+  
   try {
     yield url.save(req.file);
     req.flash('success', '创建成功！');
@@ -98,8 +104,12 @@ exports.edit = function(req, res) {
 exports.update = async(function*(req, res) {
   const url = req.urlObj;
   assign(url, only(req.body, 'name inn out memo'));
-  const ips = req.body.ips.split(',');
-  url.ips = ips;
+  if (req.body.ips) {
+    const ips = req.body.ips.split(',');
+    url.ips = ips;
+  } else {
+    url.ips = [];
+  }
   try {
     yield url.save();
     res.redirect(`/urls`);

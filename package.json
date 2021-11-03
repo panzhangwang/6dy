@@ -51,7 +51,7 @@
     "pug": "^2.0.4",
     "socket.io": "^2.3.0",
     "ultimate-pagination": "~1.0.0",
-    "validator": "^11.1.0",
+    "validator": "^13.7.0",
     "view-helpers": "~0.2.0",
     "winston": "~3.2.1"
   },
